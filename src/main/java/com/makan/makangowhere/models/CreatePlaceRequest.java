@@ -5,7 +5,9 @@ import lombok.Data;
 
 @Data
 @AllArgsConstructor
-public class CreatePersonRequest {
+public class CreatePlaceRequest {
     private String name;
-    private String email;
+    private String address;
+    private String createdBy;
+    private String meetingId;
 }

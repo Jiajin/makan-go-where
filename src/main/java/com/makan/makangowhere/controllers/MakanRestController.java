@@ -5,11 +5,15 @@ import com.makan.makangowhere.exceptions.RecordNotFoundException;
 import com.makan.makangowhere.models.CreateMeetingRequest;
 import com.makan.makangowhere.models.CreateMeetingResponse;
 import com.makan.makangowhere.models.CreatePersonRequest;
+import com.makan.makangowhere.models.CreatePlaceRequest;
+import com.makan.makangowhere.models.CreatePlaceResponse;
 import com.makan.makangowhere.models.GetMeetingRequestModel;
 import com.makan.makangowhere.models.Meeting;
 import com.makan.makangowhere.models.Person;
+import com.makan.makangowhere.models.Place;
 import com.makan.makangowhere.services.MeetingService;
 import com.makan.makangowhere.services.PersonService;
+import com.makan.makangowhere.services.PlaceService;
 
 import lombok.RequiredArgsConstructor;
 
@@ -30,9 +34,9 @@ import org.springframework.web.bind.annotation.RestController;
 public class MakanRestController {
     private final MeetingService meetingService;
     private final PersonService personService;
-    // private final PlaceService placeService;
+    private final PlaceService placeService;
 
-    @PostMapping(value = "/saveMeeting", consumes = "application/json", produces = "application/json")
+    @PostMapping(value = "/saveMeeting", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
     public ResponseEntity<CreateMeetingResponse> saveMeeting(@RequestBody CreateMeetingRequest input) {
 
@@ -85,6 +89,30 @@ public class MakanRestController {
         } catch (Exception e) {
             e.printStackTrace();
             response.setErrorMessage(e.getMessage());
+            return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @PostMapping(value = "/createPlace", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseBody
+    public ResponseEntity<CreatePlaceResponse> createPlace(@RequestBody CreatePlaceRequest input) {
+        CreatePlaceResponse response = new CreatePlaceResponse();
+        try {
+            Place place = placeService.save(input);
+
+            response.setPlace(place);
+            return new ResponseEntity<>(response, HttpStatus.CREATED);
+
+        } catch (RecordNotFoundException e) {
+            response.setErrorMessage(e.getMessage());
+            return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
+
+        } catch (InvalidInputException e) {
+            response.setErrorMessage(e.getMessage());
+            return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
+
+        } catch (Exception e) {
+            response.setErrorMessage("Internal Server Error");
             return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }

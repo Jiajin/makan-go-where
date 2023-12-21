@@ -26,13 +26,8 @@ public class Meeting {
     @Enumerated
     private MeetingStatus status;
 
-    // @ManyToMany
-    // @JoinTable(name = "meeting_person", joinColumns = @JoinColumn(name =
-    // "meeting_id"), inverseJoinColumns = @JoinColumn(name = "person_id"))
-    // private List<Person> persons;
-
     @OneToMany(mappedBy = "meeting")
-    private List<Place> locations;
+    private List<Place> places;
 
     @CreatedDate // Add not null?
     @Column(nullable = false)
@@ -49,8 +44,6 @@ public class Meeting {
         this.name = name;
         this.createdBy = createdBy;
         this.status = MeetingStatus.ACTIVE;
-        // this.persons = new ArrayList<>();
-        // this.persons.add(person);
     }
 
     public enum MeetingStatus {

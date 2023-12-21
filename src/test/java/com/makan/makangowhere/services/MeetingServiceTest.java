@@ -41,7 +41,7 @@ public class MeetingServiceTest {
 		return Stream.of(
 				Arguments.of("Valid Input", "existingPersonId", true, false),
 				Arguments.of("Invalid Input", null, true, true),
-				Arguments.of("Invalid Input", "NotExistPersonId", false, true));
+				Arguments.of("PersonNotExist", "NotExistPersonId", false, true));
 	}
 
 	@ParameterizedTest
@@ -65,13 +65,12 @@ public class MeetingServiceTest {
 		when(meetingRepository.save(any())).thenReturn(new Meeting(testName, personId));
 
 		// When
-		Meeting savedMeeting = null;
 		try {
-			savedMeeting = meetingService.save(input);
+			Meeting savedMeeting = meetingService.save(input);
 			assertEquals(testName, savedMeeting.getName());
 			assertEquals(personId, savedMeeting.getCreatedBy());
 			assertEquals("ACTIVE", savedMeeting.getStatus().toString());
-			assertEquals(null, savedMeeting.getLocations());
+			assertEquals(null, savedMeeting.getPlaces());
 		} catch (RecordNotFoundException | InvalidInputException e) {
 			// check expected exception
 			if (exception) {
