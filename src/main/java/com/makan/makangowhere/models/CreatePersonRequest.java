@@ -3,8 +3,8 @@ package com.makan.makangowhere.models;
 import lombok.Data;
 
 @Data
-public class CreateMeetingRequestModel {
+public class CreatePersonRequest {
     private String name;
-    private String createdBy;
+    private String email;
 
 }

@@ -1,16 +1,15 @@
 package com.makan.makangowhere.models;
 
 import jakarta.persistence.*;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.Data;
+
 import org.springframework.data.annotation.CreatedBy;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 
 import java.time.Instant;
 
-@Setter
-@Getter
+@Data
 @Entity
 @Table(name = "place")
 public class Place {
@@ -18,22 +17,37 @@ public class Place {
     @GeneratedValue(strategy = GenerationType.UUID)
     private String id;
 
+    @Column(nullable = false)
     private String name;
 
+    @Column(nullable = false)
     private String address;
 
+    @Column(nullable = false, columnDefinition = "boolean default false")
     private Boolean chosen;
 
-    @CreatedBy
+    // @CreatedBy
     private String createdBy;
 
-    @CreatedDate // Add not null?
+    @CreatedDate
+    @Column(nullable = false)
     private Instant createdDate;
 
     @LastModifiedDate
+    @Column(nullable = false)
     private Instant modifiedDate;
 
     @ManyToOne
     @JoinColumn(name = "meeting_id")
+
     private Meeting meeting;
+
+    protected Place() {
+    }
+
+    public Place(String name, String address, String createdBy) {
+        this.name = name;
+        this.createdBy = createdBy;
+        this.address = address;
+    }
 }
