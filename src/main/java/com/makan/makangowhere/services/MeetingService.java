@@ -24,8 +24,6 @@ public class MeetingService {
 
     public Meeting save(CreateMeetingRequest input) throws RecordNotFoundException, InvalidInputException {
 
-        Meeting meeting = null;
-
         // Validation:
         if (input.getCreatedBy() == null || input.getCreatedBy().isEmpty()) {
             throw new InvalidInputException(errorMessages.PersonNotFound);
@@ -37,7 +35,7 @@ public class MeetingService {
             throw new RecordNotFoundException(errorMessages.PersonNotFound);
         }
         try {
-            meeting = meetingRepository.save(new Meeting(input.getName(), input.getCreatedBy()));
+            Meeting meeting = meetingRepository.save(new Meeting(input.getName(), input.getCreatedBy()));
             return meeting;
         } catch (Exception e) {
             // Log Error

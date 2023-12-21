@@ -39,10 +39,7 @@ public class MakanRestController {
         CreateMeetingResponse response = new CreateMeetingResponse();
         try {
             Meeting meeting = meetingService.save(input);
-            // if (meeting == null) {
-            // response.setErrorMessage("Invalid Person");
-            // return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
-            // }
+
             response.setMeeting(meeting);
             return new ResponseEntity<>(response, HttpStatus.CREATED);
 
