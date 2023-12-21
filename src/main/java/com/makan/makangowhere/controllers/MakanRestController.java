@@ -15,6 +15,7 @@ import com.makan.makangowhere.services.MeetingService;
 import com.makan.makangowhere.services.PersonService;
 import com.makan.makangowhere.services.PlaceService;
 
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 
 import java.util.Optional;
@@ -64,7 +65,8 @@ public class MakanRestController {
 
     @PostMapping(value = "/savePerson", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
-    public ResponseEntity<Person> savePerson(@RequestBody CreatePersonRequest input) {
+    public ResponseEntity<Person> savePerson(@Valid @RequestBody CreatePersonRequest input) {
+
         Person person = new Person(input.getName(), input.getEmail());
         Person savedPerson = personService.save(person);
 
