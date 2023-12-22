@@ -75,23 +75,6 @@ public class MakanRestController {
         Place place = placeService.save(input);
 
         return new ResponseEntity<>(place, HttpStatus.CREATED);
-        // try {
-
-        // response.setPlace(place);
-        // return new ResponseEntity<>(response, HttpStatus.CREATED);
-
-        // } catch (RecordNotFoundException e) {
-        // response.setErrorMessage(e.getMessage());
-        // return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
-
-        // } catch (InvalidInputException e) {
-        // response.setErrorMessage(e.getMessage());
-        // return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
-
-        // } catch (Exception e) {
-        // response.setErrorMessage("Internal Server Error");
-        // return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
-        // }
     }
 
 }
