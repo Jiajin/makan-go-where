@@ -14,16 +14,11 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.mockito.junit.jupiter.MockitoSettings;
 import org.mockito.quality.Strictness;
 
-import com.makan.makangowhere.exceptions.InvalidInputException;
 import com.makan.makangowhere.exceptions.RecordNotFoundException;
-import com.makan.makangowhere.models.CreateMeetingRequest;
-import com.makan.makangowhere.models.CreatePersonRequest;
 import com.makan.makangowhere.models.CreatePlaceRequest;
 import com.makan.makangowhere.models.Meeting;
-import com.makan.makangowhere.models.Person;
 import com.makan.makangowhere.models.Place;
 import com.makan.makangowhere.repository.MeetingRepository;
-import com.makan.makangowhere.repository.PersonRepository;
 import com.makan.makangowhere.repository.PlaceRepository;
 
 import java.util.Optional;
@@ -43,9 +38,9 @@ public class PlaceServiceTest {
 
     private static Stream<Arguments> createTestCases() {
         return Stream.of(
-                Arguments.of("Valid Input", "address", "personId", "meetingId", true, false)
-        // Arguments.of("Invalid Input", null, true, true),
-        // Arguments.of("Invalid Input", "NotExistPersonId", false, true)
+                Arguments.of("Valid Input", "address", "personId", "meetingId", true, false),
+                Arguments.of("Invalid Input", "address", "personId", "meetingId", false, true)
+
         );
     }
 
@@ -77,10 +72,10 @@ public class PlaceServiceTest {
             assertEquals(personId, savedPlace.getCreatedBy());
             assertEquals(testName, savedPlace.getMeeting().getName());
             assertEquals(personId, savedPlace.getMeeting().getCreatedBy());
-        } catch (RecordNotFoundException | InvalidInputException e) {
+        } catch (RecordNotFoundException e) {
             // check expected exception
             if (exception) {
-                assertEquals(e.getMessage(), "The user trying to create the session does not exist");
+                assertEquals(e.getMessage(), "The makan session does not exist");
 
             } else
                 fail("Unexpected exception: " + e.getMessage());

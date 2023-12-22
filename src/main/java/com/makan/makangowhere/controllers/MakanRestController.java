@@ -1,12 +1,8 @@
 package com.makan.makangowhere.controllers;
 
-import com.makan.makangowhere.exceptions.InvalidInputException;
-import com.makan.makangowhere.exceptions.RecordNotFoundException;
 import com.makan.makangowhere.models.CreateMeetingRequest;
-import com.makan.makangowhere.models.CreateMeetingResponse;
 import com.makan.makangowhere.models.CreatePersonRequest;
 import com.makan.makangowhere.models.CreatePlaceRequest;
-import com.makan.makangowhere.models.CreatePlaceResponse;
 import com.makan.makangowhere.models.GetMeetingRequestModel;
 import com.makan.makangowhere.models.Meeting;
 import com.makan.makangowhere.models.Person;
@@ -17,8 +13,6 @@ import com.makan.makangowhere.services.PlaceService;
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-
-import java.util.Optional;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -56,6 +50,7 @@ public class MakanRestController {
     @ResponseBody
     public ResponseEntity<Person> savePerson(@Valid @RequestBody CreatePersonRequest input) {
 
+        logger.info("Received: {}", input);
         Person person = new Person(input.getName(), input.getEmail());
         Person savedPerson = personService.save(person);
 
@@ -65,6 +60,8 @@ public class MakanRestController {
     @PostMapping(value = "/getMeetingById", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
     public ResponseEntity<Meeting> getMeetingById(@Valid @RequestBody GetMeetingRequestModel input) {
+
+        logger.info("Received: {}", input);
         Meeting meeting = meetingService.get(input.getId());
 
         return new ResponseEntity<>(meeting, HttpStatus.OK);
@@ -72,26 +69,29 @@ public class MakanRestController {
 
     @PostMapping(value = "/createPlace", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
-    public ResponseEntity<CreatePlaceResponse> createPlace(@RequestBody CreatePlaceRequest input) {
-        CreatePlaceResponse response = new CreatePlaceResponse();
-        try {
-            Place place = placeService.save(input);
+    public ResponseEntity<Place> createPlace(@Valid @RequestBody CreatePlaceRequest input) {
 
-            response.setPlace(place);
-            return new ResponseEntity<>(response, HttpStatus.CREATED);
+        logger.info("Received: {}", input);
+        Place place = placeService.save(input);
 
-        } catch (RecordNotFoundException e) {
-            response.setErrorMessage(e.getMessage());
-            return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
+        return new ResponseEntity<>(place, HttpStatus.CREATED);
+        // try {
 
-        } catch (InvalidInputException e) {
-            response.setErrorMessage(e.getMessage());
-            return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
+        // response.setPlace(place);
+        // return new ResponseEntity<>(response, HttpStatus.CREATED);
 
-        } catch (Exception e) {
-            response.setErrorMessage("Internal Server Error");
-            return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
-        }
+        // } catch (RecordNotFoundException e) {
+        // response.setErrorMessage(e.getMessage());
+        // return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
+
+        // } catch (InvalidInputException e) {
+        // response.setErrorMessage(e.getMessage());
+        // return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
+
+        // } catch (Exception e) {
+        // response.setErrorMessage("Internal Server Error");
+        // return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
+        // }
     }
 
 }

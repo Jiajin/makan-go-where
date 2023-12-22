@@ -3,6 +3,7 @@ package com.makan.makangowhere.controllers;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.makan.makangowhere.models.CreateMeetingRequest;
 import com.makan.makangowhere.models.CreatePersonRequest;
+import com.makan.makangowhere.models.CreatePlaceRequest;
 import com.makan.makangowhere.repository.PersonRepository;
 import com.makan.makangowhere.services.MeetingService;
 import com.makan.makangowhere.services.PersonService;
@@ -10,7 +11,6 @@ import com.makan.makangowhere.services.PlaceService;
 
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.Mock;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
@@ -43,6 +43,7 @@ public class MakanRestControllerTest {
 
     private final String savePersonUrl = "/api/v1/client/savePerson";
     private final String createMeetingUrl = "/api/v1/client/saveMeeting";
+    private final String createPlaceUrl = "/api/v1/client/createPlace";
 
     @Test
     public void whenPostToCreatePerson_BlankInput() throws Exception {
@@ -85,28 +86,20 @@ public class MakanRestControllerTest {
                 .andExpect(MockMvcResultMatchers.jsonPath("$.name").value("must not be blank"));
     }
 
-    // @Test
-    // public void TestCreateMeetingResponse() {
-    // CreateMeetingResponse response = new CreateMeetingResponse();
+    @Test
+    public void whenPostToCreatePlace_BlankInput() throws Exception {
+        // Given
+        CreatePlaceRequest invalidRequest = new CreatePlaceRequest("", "", "", "");
 
-    // Meeting meeting = new Meeting("123", "123");
+        // When Then
+        mockMvc.perform(MockMvcRequestBuilders.post(createPlaceUrl)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(new ObjectMapper().writeValueAsString(invalidRequest)))
+                .andExpect(MockMvcResultMatchers.status().isBadRequest())
+                .andExpect(MockMvcResultMatchers.jsonPath("$.name").value("must not be blank"))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.address").value("must not be blank"))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.createdBy").value("must not be blank"))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.meetingId").value("must not be blank"));
+    }
 
-    // response.setMeeting(meeting);
-    // Assertions.assertEquals(response.getMeeting().getName(), "123");
-
-    // }
-    // @Autowired
-    // protected TestRestTemplate testRestTemplate;
-
-    // private final String url = "/api/v1/client/save";
-
-    // @Test
-    // public void postMeetingSuccessTest() {
-    // Meeting meeting = new Meeting("123", "9489b7aa-c7bc-4975-9a04-57844dab1d6a");
-    // HttpEntity<Meeting> httpEntity = new HttpEntity<>(meeting);
-    // ResponseEntity<Meeting> response = testRestTemplate.exchange(url,
-    // HttpMethod.POST, httpEntity, Meeting.class);
-    // System.out.println(response.getStatusCode());
-    // Assertions.assertEquals(HttpStatus.CREATED, response.getStatusCode());
-    // }
 }

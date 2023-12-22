@@ -14,7 +14,6 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.mockito.junit.jupiter.MockitoSettings;
 import org.mockito.quality.Strictness;
 
-import com.makan.makangowhere.exceptions.InvalidInputException;
 import com.makan.makangowhere.exceptions.RecordNotFoundException;
 import com.makan.makangowhere.models.CreateMeetingRequest;
 import com.makan.makangowhere.models.Meeting;
@@ -69,7 +68,7 @@ public class MeetingServiceTest {
 			assertEquals(personId, savedMeeting.getCreatedBy());
 			assertEquals("ACTIVE", savedMeeting.getStatus().toString());
 			assertEquals(null, savedMeeting.getPlaces());
-		} catch (RecordNotFoundException | InvalidInputException e) {
+		} catch (RecordNotFoundException e) {
 			// check expected exception
 			if (exception) {
 				assertEquals(e.getMessage(), "The user trying to create the session does not exist");
@@ -103,7 +102,7 @@ public class MeetingServiceTest {
 			Meeting retrieved = meetingService.get(meetingId);
 			// Then
 			assertNotNull(retrieved);
-		} catch (RecordNotFoundException | InvalidInputException e) {
+		} catch (RecordNotFoundException e) {
 			// check expected exception
 			if (exception) {
 				assertEquals(e.getMessage(), "The specified record does not exist");

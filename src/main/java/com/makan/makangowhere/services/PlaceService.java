@@ -2,6 +2,8 @@ package com.makan.makangowhere.services;
 
 import java.util.Optional;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import com.makan.errorMessages;
@@ -20,14 +22,14 @@ public class PlaceService {
     private final PlaceRepository placeRepository;
     private final MeetingRepository meetingRepository;
 
-    public Place save(CreatePlaceRequest input) {
+    private final Logger logger = LoggerFactory.getLogger(PlaceService.class);
 
-        // Validation
+    public Place save(CreatePlaceRequest input) {
 
         // Check if meeting exists
         Optional<Meeting> meeting = meetingRepository.findById(input.getMeetingId());
         if (!meeting.isPresent()) {
-            throw new RecordNotFoundException(errorMessages.PersonNotFound); // TODO: update exception msg
+            throw new RecordNotFoundException(errorMessages.MeetingNotFound);
         }
         try {
             Place place = placeRepository.save(
@@ -35,8 +37,9 @@ public class PlaceService {
             return place;
         } catch (Exception e) {
             // Log Error
-            e.printStackTrace();
-            // Throw exception
+            logger.trace(e.getStackTrace().toString());
+            logger.info(e.getMessage());
+
             throw e;
         }
     }

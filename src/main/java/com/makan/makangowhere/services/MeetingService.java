@@ -1,7 +1,6 @@
 package com.makan.makangowhere.services;
 
 import com.makan.errorMessages;
-import com.makan.makangowhere.exceptions.InvalidInputException;
 import com.makan.makangowhere.exceptions.RecordNotFoundException;
 import com.makan.makangowhere.models.CreateMeetingRequest;
 import com.makan.makangowhere.models.Meeting;
@@ -26,9 +25,8 @@ public class MeetingService {
 
     private final Logger logger = LoggerFactory.getLogger(MeetingService.class);
 
-    public Meeting save(CreateMeetingRequest input) throws RecordNotFoundException, InvalidInputException {
+    public Meeting save(CreateMeetingRequest input) throws RecordNotFoundException {
 
-        logger.info("Service: Received: {}", input);
         // Check if person exists
         Optional<Person> person = personRepository.findById(input.getCreatedBy());
         if (!person.isPresent()) {
