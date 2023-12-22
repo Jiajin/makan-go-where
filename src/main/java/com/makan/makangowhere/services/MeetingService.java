@@ -13,6 +13,8 @@ import lombok.AllArgsConstructor;
 
 import java.util.Optional;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -22,13 +24,11 @@ public class MeetingService {
     private final MeetingRepository meetingRepository;
     private final PersonRepository personRepository;
 
+    private final Logger logger = LoggerFactory.getLogger(MeetingService.class);
+
     public Meeting save(CreateMeetingRequest input) throws RecordNotFoundException, InvalidInputException {
 
-        // Validation:
-        if (input.getCreatedBy() == null || input.getCreatedBy().isEmpty()) {
-            throw new InvalidInputException(errorMessages.PersonNotFound);
-        }
-
+        logger.info("Service: Received: {}", input);
         // Check if person exists
         Optional<Person> person = personRepository.findById(input.getCreatedBy());
         if (!person.isPresent()) {
@@ -39,8 +39,9 @@ public class MeetingService {
             return meeting;
         } catch (Exception e) {
             // Log Error
+            logger.trace(e.getStackTrace().toString());
+            logger.info(e.getMessage());
 
-            // Throw exception
             throw e;
         }
     }

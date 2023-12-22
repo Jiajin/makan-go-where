@@ -50,9 +50,7 @@ public class MeetingServiceTest {
 	public void testSave(String testName, String personId, boolean personExist, boolean exception) {
 
 		// Given
-		CreateMeetingRequest input = new CreateMeetingRequest();
-		input.setName(testName);
-		input.setCreatedBy(personId);
+		CreateMeetingRequest input = new CreateMeetingRequest(testName, personId);
 
 		Person existingPerson = new Person("name", "email");
 		existingPerson.setId(personId);

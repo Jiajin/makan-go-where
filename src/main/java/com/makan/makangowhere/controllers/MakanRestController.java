@@ -20,6 +20,8 @@ import lombok.RequiredArgsConstructor;
 
 import java.util.Optional;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -37,29 +39,16 @@ public class MakanRestController {
     private final PersonService personService;
     private final PlaceService placeService;
 
+    private final Logger logger = LoggerFactory.getLogger(MakanRestController.class);
+
     @PostMapping(value = "/saveMeeting", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
-    public ResponseEntity<CreateMeetingResponse> saveMeeting(@RequestBody CreateMeetingRequest input) {
+    public ResponseEntity<Meeting> saveMeeting(@Valid @RequestBody CreateMeetingRequest input) {
 
-        CreateMeetingResponse response = new CreateMeetingResponse();
-        try {
-            Meeting meeting = meetingService.save(input);
+        logger.info("Received: {}", input);
+        Meeting meeting = meetingService.save(input);
 
-            response.setMeeting(meeting);
-            return new ResponseEntity<>(response, HttpStatus.CREATED);
-
-        } catch (RecordNotFoundException e) {
-            response.setErrorMessage(e.getMessage());
-            return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
-
-        } catch (InvalidInputException e) {
-            response.setErrorMessage(e.getMessage());
-            return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
-
-        } catch (Exception e) {
-            response.setErrorMessage("Internal Server Error");
-            return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
-        }
+        return new ResponseEntity<>(meeting, HttpStatus.CREATED);
 
     }
 
