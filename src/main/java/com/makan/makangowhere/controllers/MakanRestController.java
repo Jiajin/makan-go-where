@@ -64,24 +64,10 @@ public class MakanRestController {
 
     @PostMapping(value = "/getMeetingById", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
-    public ResponseEntity<CreateMeetingResponse> getMeetingById(@RequestBody GetMeetingRequestModel input) {
-        CreateMeetingResponse response = new CreateMeetingResponse();
-        try {
-            Optional<Meeting> meetingOptional = meetingService.get(input.getId());
+    public ResponseEntity<Meeting> getMeetingById(@Valid @RequestBody GetMeetingRequestModel input) {
+        Meeting meeting = meetingService.get(input.getId());
 
-            if (meetingOptional.isPresent()) {
-                Meeting meeting = meetingOptional.get();
-                response.setMeeting(meeting);
-                return new ResponseEntity<>(response, HttpStatus.OK);
-            } else {
-                response.setErrorMessage("Meeting not found");
-                return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-            response.setErrorMessage(e.getMessage());
-            return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
-        }
+        return new ResponseEntity<>(meeting, HttpStatus.OK);
     }
 
     @PostMapping(value = "/createPlace", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)

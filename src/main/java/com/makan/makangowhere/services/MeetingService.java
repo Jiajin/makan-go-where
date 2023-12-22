@@ -46,8 +46,22 @@ public class MeetingService {
         }
     }
 
-    public Optional<Meeting> get(String meetingId) {
-        return meetingRepository.findById(meetingId);
+    public Meeting get(String meetingId) {
+        try {
+            Optional<Meeting> retrieved = meetingRepository.findById(meetingId);
+
+            if (!retrieved.isPresent()) {
+                throw new RecordNotFoundException(errorMessages.RecordNotFound);
+            }
+
+            return retrieved.get();
+        } catch (Exception e) {
+            // Log Error
+            logger.trace(e.getStackTrace().toString());
+            logger.info(e.getMessage());
+
+            throw e;
+        }
     }
 
 }

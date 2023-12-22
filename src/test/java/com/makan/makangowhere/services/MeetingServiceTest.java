@@ -79,4 +79,38 @@ public class MeetingServiceTest {
 		}
 	}
 
+	private static Stream<Arguments> getTestCases() {
+		return Stream.of(
+				Arguments.of("Valid Input", true, false),
+				Arguments.of("Invalid Input", false, true));
+	}
+
+	@ParameterizedTest
+	@MethodSource("getTestCases")
+	@MockitoSettings(strictness = Strictness.LENIENT) // To allow for multiple test cases w single Parameterized test
+	public void testGet(String meetingId, boolean meetingExist, boolean exception) {
+
+		Meeting existingMeeting = new Meeting("anything", "anything");
+		// Given
+		if (meetingExist) {
+			when(meetingRepository.findById(meetingId)).thenReturn(Optional.of(existingMeeting));
+		} else {
+			when(meetingRepository.findById(meetingId)).thenReturn(Optional.ofNullable(null));
+		}
+
+		// When
+		try {
+			Meeting retrieved = meetingService.get(meetingId);
+			// Then
+			assertNotNull(retrieved);
+		} catch (RecordNotFoundException | InvalidInputException e) {
+			// check expected exception
+			if (exception) {
+				assertEquals(e.getMessage(), "The specified record does not exist");
+
+			} else
+				fail("Unexpected exception: " + e.getMessage());
+		}
+	}
+
 }
