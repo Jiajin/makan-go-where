@@ -40,13 +40,13 @@ public class Meeting {
     protected Meeting() {
     }
 
-    public Meeting(String name, String createdBy) {
+    public Meeting(String name, String createdBy, MeetingStatus status) {
         this.name = name;
         this.createdBy = createdBy;
-        this.status = MeetingStatus.ACTIVE;
+        this.status = status;
     }
 
     public enum MeetingStatus {
-        ACTIVE, INACTIVE
+        ACTIVE, FINAL
     }
 }

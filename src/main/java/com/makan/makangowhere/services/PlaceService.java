@@ -31,6 +31,10 @@ public class PlaceService {
         if (!meeting.isPresent()) {
             throw new RecordNotFoundException(errorMessages.MeetingNotFound);
         }
+
+        // TODO: Check if person is part of meeting, and if they already have an
+        // existing Place created (unless u combine this with edit and use DB to
+        // prevent)
         try {
             Place place = placeRepository.save(
                     new Place(input.getName(), input.getAddress(), input.getCreatedBy(), meeting.get()));

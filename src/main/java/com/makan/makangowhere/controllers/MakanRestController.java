@@ -3,6 +3,7 @@ package com.makan.makangowhere.controllers;
 import com.makan.makangowhere.models.CreateMeetingRequest;
 import com.makan.makangowhere.models.CreatePersonRequest;
 import com.makan.makangowhere.models.CreatePlaceRequest;
+import com.makan.makangowhere.models.FinalizeMeetingRequest;
 import com.makan.makangowhere.models.GetMeetingRequestModel;
 import com.makan.makangowhere.models.Meeting;
 import com.makan.makangowhere.models.Person;
@@ -46,6 +47,17 @@ public class MakanRestController {
 
     }
 
+    @PostMapping(value = "/finalizeMeeting", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseBody
+    public ResponseEntity<Meeting> finalizeMeeting(@Valid @RequestBody FinalizeMeetingRequest input) {
+
+        logger.info("Received: {}", input);
+        Meeting meeting = meetingService.finalize(input);
+
+        return new ResponseEntity<>(meeting, HttpStatus.CREATED);
+
+    }
+
     @PostMapping(value = "/savePerson", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
     public ResponseEntity<Person> savePerson(@Valid @RequestBody CreatePersonRequest input) {
@@ -57,16 +69,6 @@ public class MakanRestController {
         return new ResponseEntity<>(savedPerson, HttpStatus.CREATED);
     }
 
-    @PostMapping(value = "/getMeetingById", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    @ResponseBody
-    public ResponseEntity<Meeting> getMeetingById(@Valid @RequestBody GetMeetingRequestModel input) {
-
-        logger.info("Received: {}", input);
-        Meeting meeting = meetingService.get(input.getId());
-
-        return new ResponseEntity<>(meeting, HttpStatus.OK);
-    }
-
     @PostMapping(value = "/createPlace", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
     public ResponseEntity<Place> createPlace(@Valid @RequestBody CreatePlaceRequest input) {
@@ -75,6 +77,16 @@ public class MakanRestController {
         Place place = placeService.save(input);
 
         return new ResponseEntity<>(place, HttpStatus.CREATED);
+    }
+
+    @PostMapping(value = "/getMeetingById", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseBody
+    public ResponseEntity<Meeting> getMeetingById(@Valid @RequestBody GetMeetingRequestModel input) {
+
+        logger.info("Received: {}", input);
+        Meeting meeting = meetingService.get(input.getId());
+
+        return new ResponseEntity<>(meeting, HttpStatus.OK);
     }
 
 }

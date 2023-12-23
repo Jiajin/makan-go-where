@@ -17,6 +17,7 @@ import org.mockito.quality.Strictness;
 import com.makan.makangowhere.exceptions.RecordNotFoundException;
 import com.makan.makangowhere.models.CreatePlaceRequest;
 import com.makan.makangowhere.models.Meeting;
+import com.makan.makangowhere.models.Meeting.MeetingStatus;
 import com.makan.makangowhere.models.Place;
 import com.makan.makangowhere.repository.MeetingRepository;
 import com.makan.makangowhere.repository.PlaceRepository;
@@ -53,7 +54,7 @@ public class PlaceServiceTest {
         // Given
         CreatePlaceRequest input = new CreatePlaceRequest(testName, address, personId, meetingId);
 
-        Meeting existingMeeting = new Meeting(testName, personId);
+        Meeting existingMeeting = new Meeting(testName, personId, MeetingStatus.ACTIVE);
         existingMeeting.setId(meetingId);
 
         if (meetingExist) {
