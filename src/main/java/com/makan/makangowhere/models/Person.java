@@ -1,14 +1,17 @@
 package com.makan.makangowhere.models;
 
 import jakarta.persistence.*;
-import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
+
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.time.Instant;
 
-@Data
+@Setter
+@Getter
 @Entity
 @Table(name = "person")
 @EntityListeners(AuditingEntityListener.class)

@@ -9,7 +9,8 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import java.time.Instant;
 import java.util.List;
 
-@Data
+@Setter
+@Getter
 @Entity
 @Table(name = "meeting")
 @EntityListeners(AuditingEntityListener.class)
@@ -26,7 +27,7 @@ public class Meeting {
     @Enumerated
     private MeetingStatus status;
 
-    @OneToMany(mappedBy = "meeting")
+    @OneToMany(mappedBy = "meeting", fetch = FetchType.EAGER)
     private List<Place> places;
 
     @CreatedDate // Add not null?
