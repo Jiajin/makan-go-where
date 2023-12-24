@@ -75,9 +75,11 @@ public class MeetingServiceTest {
 
 	private static Stream<Arguments> saveTestCases() {
 		return Stream.of(
-				Arguments.of(new CreateMeetingRequest("meetingName", "createdBy"), true, false, ""),
-				Arguments.of(new CreateMeetingRequest("meetingName", "createdBy"), false, true,
-						"The user trying to create the session does not exist"));
+				Arguments.of(new CreateMeetingRequest("meetingName", "createdBy"), true, ""),
+				Arguments.of(new CreateMeetingRequest("meetingName", "createdBy"), false,
+						"The user trying to create the session does not exist")
+
+		);
 	}
 
 	@ParameterizedTest
@@ -110,7 +112,7 @@ public class MeetingServiceTest {
 
 		} catch (RecordNotFoundException e) {
 			// check expected exception
-			if (exceptionMessage.equals("")) {
+			if (!exceptionMessage.equals("")) {
 				assertEquals(e.getMessage(), exceptionMessage);
 
 			} else
