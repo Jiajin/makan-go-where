@@ -111,13 +111,13 @@ public class MeetingService {
 
     public Meeting get(String meetingId) {
         try {
-            Optional<Meeting> retrieved = meetingRepository.findById(meetingId);
+            Optional<Meeting> meetingOptional = meetingRepository.findById(meetingId);
 
-            if (!retrieved.isPresent()) {
+            if (!meetingOptional.isPresent()) {
                 throw new RecordNotFoundException(errorMessages.RecordNotFound);
             }
 
-            return retrieved.get();
+            return meetingOptional.get();
         } catch (Exception e) {
             // Log Error
             logger.trace(e.getStackTrace().toString());

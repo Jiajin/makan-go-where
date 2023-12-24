@@ -52,7 +52,7 @@ public class Person {
     }
 
     public void setMeetingCsvList(List<String> meetings) {
-        this.meetingCsvList = meetings.size() > 0 ? String.join(",", meetings) : null;
+        this.meetingCsvList = (meetings == null || meetings.size() == 0) ? null : String.join(",", meetings);
     }
 
 }

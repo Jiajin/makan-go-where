@@ -7,4 +7,5 @@ public class errorMessages {
     public static final String NotMeetingHost = "Only the makan host can end the session";
     public static final String MeetingOver = "The makan location has been chosen!";
     public static final String NoMeetingLocations = "There are no submitted locations for this makan session";
+    public static final String NotInMeeting = "The user trying to create the location is not part of this makan session";
 }
