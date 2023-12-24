@@ -42,6 +42,7 @@ public class MeetingServiceTest {
 	@Autowired
 	private MeetingService meetingService;
 
+	private static String personId;
 	private static String meetingId;
 
 	@BeforeEach
@@ -53,15 +54,17 @@ public class MeetingServiceTest {
 
 		Person person = new Person("name", "123@email.com");
 		personRepository.save(person);
+		personId = person.getId();
 
-		Meeting meeting = new Meeting("meetingName", person.getId(), MeetingStatus.ACTIVE);
+		Person person2 = new Person("name", "123@email.com");
+		personRepository.save(person2);
+
+		Meeting meeting = new Meeting("meetingName", person2.getId(), MeetingStatus.ACTIVE);
 		meetingRepository.save(meeting);
 
 		List<Place> placesList = new ArrayList<>();
 		placesList.add(new Place("1", "1", person.getId(), meeting));
-		placesList.add(new Place("2", "2", person.getId(), meeting));
-		placesList.add(new Place("3", "3", person.getId(), meeting));
-		placesList.add(new Place("4", "4", person.getId(), meeting));
+		placesList.add(new Place("2", "2", person2.getId(), meeting));
 
 		placesList.forEach(place -> placeRepository.save(place));
 		meeting.setPlaces(placesList);
@@ -79,26 +82,35 @@ public class MeetingServiceTest {
 
 	@ParameterizedTest
 	@MethodSource("saveTestCases")
-	public void testSave(CreateMeetingRequest input, boolean personExists, boolean exception, String exceptionMessage) {
+	public void testSave(CreateMeetingRequest input, boolean personExists, String exceptionMessage) {
 
 		// Given
 		if (personExists) {
-
-			Person retrieved = personRepository.findAll().get(0);
-			// assertEquals(null, retrieved);
-			input.setCreatedBy(retrieved.getId());
+			Optional<Person> retrieved = personRepository.findById(personId);
+			assertEquals(true, retrieved.isPresent());
+			Person person = retrieved.get();
+			input.setCreatedBy(person.getId());
 		}
 
 		// When
 		try {
 			Meeting savedMeeting = meetingService.save(input);
+
+			// Then
 			assertEquals(input.getName(), savedMeeting.getName());
 			assertEquals(input.getCreatedBy(), savedMeeting.getCreatedBy());
 			assertEquals("ACTIVE", savedMeeting.getStatus().toString());
 			assertEquals(null, savedMeeting.getPlaces());
+
+			Optional<Person> retrieved = personRepository.findById(input.getCreatedBy());
+			assertEquals(true, retrieved.isPresent());
+			Person person = retrieved.get();
+
+			assertEquals(savedMeeting.getId(), person.getMeetingCsvList().get(0));
+
 		} catch (RecordNotFoundException e) {
 			// check expected exception
-			if (exception) {
+			if (exceptionMessage.equals("")) {
 				assertEquals(e.getMessage(), exceptionMessage);
 
 			} else
@@ -120,7 +132,8 @@ public class MeetingServiceTest {
 				Arguments.of(new FinalizeMeetingRequest("meetingId", "personId"), true, true,
 						false, true,
 						"Only the makan host can end the session"),
-				Arguments.of(new FinalizeMeetingRequest("meetingId", "personId"), true, true, true, false,
+				Arguments.of(new FinalizeMeetingRequest("meetingId", "personId"), true, true,
+						true, false,
 						"There are no submitted locations for this makan session")
 
 		);
@@ -147,7 +160,6 @@ public class MeetingServiceTest {
 			if (!hasPlaces) {
 				// Clear places in DB
 				List<Place> placesList = existingMeeting.getPlaces();
-				// placesList.forEach(place -> placeRepository.delete(place));
 				placeRepository.deleteAll(placesList);
 				existingMeeting.setPlaces(null);
 			}

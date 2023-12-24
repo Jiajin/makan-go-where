@@ -16,11 +16,22 @@ import java.time.Instant;
 @Getter
 @Entity
 @Table(name = "place")
+@IdClass(PlaceId.class)
 @EntityListeners(AuditingEntityListener.class)
 public class Place {
+    // @Id
+    // @GeneratedValue(strategy = GenerationType.UUID)
+    // private String id;
+
+    // @CreatedBy
     @Id
-    @GeneratedValue(strategy = GenerationType.UUID)
-    private String id;
+    private String createdBy;
+
+    @Id
+    @ManyToOne
+    @JoinColumn(name = "meeting_id")
+    @JsonIgnore
+    private Meeting meeting;
 
     @Column(nullable = false)
     private String name;
@@ -31,21 +42,13 @@ public class Place {
     @Column(nullable = false, columnDefinition = "boolean default false")
     private Boolean chosen;
 
-    // @CreatedBy
-    private String createdBy;
-
     @CreatedDate
-    @Column(nullable = false)
+    // @Column(nullable = false)
     private Instant createdDate;
 
     @LastModifiedDate
     @Column(nullable = false)
     private Instant modifiedDate;
-
-    @ManyToOne
-    @JoinColumn(name = "meeting_id")
-    @JsonIgnore
-    private Meeting meeting;
 
     protected Place() {
     }

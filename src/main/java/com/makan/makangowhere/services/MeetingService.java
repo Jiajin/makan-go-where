@@ -15,6 +15,7 @@ import com.makan.makangowhere.repository.PlaceRepository;
 import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
 
+import java.util.ArrayList;
 import java.util.Optional;
 import java.util.Random;
 import java.util.List;
@@ -33,16 +34,30 @@ public class MeetingService {
 
     private final Logger logger = LoggerFactory.getLogger(MeetingService.class);
 
+    @Transactional
     public Meeting save(CreateMeetingRequest input) throws RecordNotFoundException {
 
         // Check if person exists
-        Optional<Person> person = personRepository.findById(input.getCreatedBy());
-        if (!person.isPresent()) {
+        Optional<Person> personOptional = personRepository.findById(input.getCreatedBy());
+        if (!personOptional.isPresent()) {
             throw new RecordNotFoundException(errorMessages.PersonNotFound);
         }
+
+        Person person = personOptional.get();
+
         try {
             Meeting meeting = meetingRepository
                     .save(new Meeting(input.getName(), input.getCreatedBy(), MeetingStatus.ACTIVE));
+
+            // Update person
+            List<String> oldMeetingList = person.getMeetingCsvList();
+            if (oldMeetingList == null || oldMeetingList.size() == 0) {
+                oldMeetingList = new ArrayList<>();
+            }
+            oldMeetingList.add(meeting.getId());
+            person.setMeetingCsvList(oldMeetingList);
+            personRepository.save(person);
+
             return meeting;
         } catch (Exception e) {
             // Log Error

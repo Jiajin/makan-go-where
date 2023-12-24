@@ -9,6 +9,8 @@ import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.time.Instant;
+import java.util.Arrays;
+import java.util.List;
 
 @Setter
 @Getter
@@ -44,4 +46,13 @@ public class Person {
         this.email = email;
         // TODO: update meetings
     }
+
+    public List<String> getMeetingCsvList() {
+        return meetingCsvList != null ? Arrays.asList(meetingCsvList.split(",")) : null;
+    }
+
+    public void setMeetingCsvList(List<String> meetings) {
+        this.meetingCsvList = meetings.size() > 0 ? String.join(",", meetings) : null;
+    }
+
 }
