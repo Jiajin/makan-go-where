@@ -1,6 +1,7 @@
 package com.makan.makangowhere.controllers;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.makan.makangowhere.models.AcceptInviteRequest;
 import com.makan.makangowhere.models.CreateMeetingRequest;
 import com.makan.makangowhere.models.CreatePersonRequest;
 import com.makan.makangowhere.models.CreatePlaceRequest;
@@ -44,6 +45,7 @@ public class MakanRestControllerTest {
     private final String savePersonUrl = "/api/v1/client/savePerson";
     private final String createMeetingUrl = "/api/v1/client/saveMeeting";
     private final String createPlaceUrl = "/api/v1/client/createPlace";
+    private final String acceptInviteUrl = "/api/v1/client/acceptInvite";
 
     @Test
     public void whenPostToCreatePerson_BlankInput() throws Exception {
@@ -70,6 +72,21 @@ public class MakanRestControllerTest {
                 .content(new ObjectMapper().writeValueAsString(invalidRequest)))
                 .andExpect(MockMvcResultMatchers.status().isBadRequest())
                 .andExpect(MockMvcResultMatchers.jsonPath("$.email").value("must be a well-formed email address"));
+    }
+
+    @Test
+    public void whenPostToAcceptInvite_BlankInput() throws Exception {
+        // Given
+        AcceptInviteRequest invalidRequest = new AcceptInviteRequest("", "", "");
+
+        // When Then
+        mockMvc.perform(MockMvcRequestBuilders.post(acceptInviteUrl)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(new ObjectMapper().writeValueAsString(invalidRequest)))
+                .andExpect(MockMvcResultMatchers.status().isBadRequest())
+                .andExpect(MockMvcResultMatchers.jsonPath("$.email").value("must not be blank"))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.name").value("must not be blank"))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.meetingId").value("must not be blank"));
     }
 
     @Test

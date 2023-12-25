@@ -1,5 +1,6 @@
 package com.makan.makangowhere.controllers;
 
+import com.makan.makangowhere.models.AcceptInviteRequest;
 import com.makan.makangowhere.models.CreateMeetingRequest;
 import com.makan.makangowhere.models.CreatePersonRequest;
 import com.makan.makangowhere.models.CreatePlaceRequest;
@@ -65,6 +66,16 @@ public class MakanRestController {
         logger.info("Received: {}", input);
         Person person = new Person(input.getName(), input.getEmail());
         Person savedPerson = personService.save(person);
+
+        return new ResponseEntity<>(savedPerson, HttpStatus.CREATED);
+    }
+
+    @PostMapping(value = "/acceptInvite", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseBody
+    public ResponseEntity<Person> acceptInvite(@Valid @RequestBody AcceptInviteRequest input) {
+
+        logger.info("Received: {}", input);
+        Person savedPerson = personService.savePersonMeeting(input);
 
         return new ResponseEntity<>(savedPerson, HttpStatus.CREATED);
     }
