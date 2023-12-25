@@ -56,7 +56,7 @@ public class MeetingServiceTest {
 		personRepository.save(person);
 		personId = person.getId();
 
-		Person person2 = new Person("name", "123@email.com");
+		Person person2 = new Person("name", "1234@email.com");
 		personRepository.save(person2);
 
 		Meeting meeting = new Meeting("meetingName", person2.getId(), MeetingStatus.ACTIVE);
@@ -77,7 +77,7 @@ public class MeetingServiceTest {
 		return Stream.of(
 				Arguments.of(new CreateMeetingRequest("meetingName", "createdBy"), true, ""),
 				Arguments.of(new CreateMeetingRequest("meetingName", "createdBy"), false,
-						"The user trying to create the session does not exist")
+						"The user does not exist")
 
 		);
 	}
@@ -195,15 +195,15 @@ public class MeetingServiceTest {
 
 	@ParameterizedTest
 	@MethodSource("getTestCases")
-	public void testGet(String meetingId, boolean meetingExist, boolean exception) {
+	public void testGet(String id, boolean meetingExist, boolean exception) {
 
 		// Given
 		if (meetingExist)
-			meetingId = meetingRepository.findAll().get(0).getId();
+			id = meetingId;
 
 		// When
 		try {
-			Meeting retrieved = meetingService.get(meetingId);
+			Meeting retrieved = meetingService.get(id);
 			// Then
 			assertNotNull(retrieved);
 		} catch (RecordNotFoundException e) {

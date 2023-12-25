@@ -5,7 +5,8 @@ import com.makan.makangowhere.models.CreateMeetingRequest;
 import com.makan.makangowhere.models.CreatePersonRequest;
 import com.makan.makangowhere.models.CreatePlaceRequest;
 import com.makan.makangowhere.models.FinalizeMeetingRequest;
-import com.makan.makangowhere.models.GetMeetingRequestModel;
+import com.makan.makangowhere.models.GetMeetingRequest;
+import com.makan.makangowhere.models.GetPersonRequest;
 import com.makan.makangowhere.models.Meeting;
 import com.makan.makangowhere.models.Person;
 import com.makan.makangowhere.models.Place;
@@ -80,6 +81,16 @@ public class MakanRestController {
         return new ResponseEntity<>(savedPerson, HttpStatus.CREATED);
     }
 
+    @PostMapping(value = "/getPerson", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseBody
+    public ResponseEntity<Person> getPerson(@Valid @RequestBody GetPersonRequest input) {
+
+        logger.info("Received: {}", input);
+        Person person = personService.get(input.getEmail());
+
+        return new ResponseEntity<>(person, HttpStatus.CREATED);
+    }
+
     @PostMapping(value = "/createPlace", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
     public ResponseEntity<Place> createPlace(@Valid @RequestBody CreatePlaceRequest input) {
@@ -92,7 +103,7 @@ public class MakanRestController {
 
     @PostMapping(value = "/getMeetingById", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
-    public ResponseEntity<Meeting> getMeetingById(@Valid @RequestBody GetMeetingRequestModel input) {
+    public ResponseEntity<Meeting> getMeetingById(@Valid @RequestBody GetMeetingRequest input) {
 
         logger.info("Received: {}", input);
         Meeting meeting = meetingService.get(input.getId());

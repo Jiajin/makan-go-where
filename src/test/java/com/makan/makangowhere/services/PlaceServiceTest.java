@@ -81,7 +81,7 @@ public class PlaceServiceTest {
                         "The makan location has been chosen!"),
                 Arguments.of(new CreatePlaceRequest("placeName", "address", "createdBy", "meetingId"),
                         true, true, false, true,
-                        "The user trying to create the session does not exist"),
+                        "The user does not exist"),
                 Arguments.of(new CreatePlaceRequest("placeName", "address", "createdBy", "meetingId"),
                         true, true, true, false,
                         "The user trying to create the location is not part of this makan session")

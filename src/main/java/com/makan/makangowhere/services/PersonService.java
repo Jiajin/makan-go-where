@@ -48,4 +48,20 @@ public class PersonService {
         return savedPerson;
     }
 
+    public Person get(String email) {
+        Optional<Person> personOptional = personRepository.findByEmail(email);
+        if (!personOptional.isPresent()) {
+            throw new RecordNotFoundException(errorMessages.PersonNotFound);
+        }
+        Person person = personOptional.get();
+
+        // Populate Meeting entities
+        List<String> meetingList = person.getMeetingCsvList();
+        if (meetingList != null && meetingList.size() > 0) {
+            person.setMeetingList(meetingRepository.findAllById(meetingList));
+        }
+
+        return person;
+    }
+
 }

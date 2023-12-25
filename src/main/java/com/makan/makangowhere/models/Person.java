@@ -25,10 +25,13 @@ public class Person {
     @Column(nullable = false)
     private String name;
 
-    @Column(nullable = false)
+    @Column(nullable = false, unique = true)
     private String email;
 
     private String meetingCsvList;
+
+    @Transient // To populate on retrieval
+    private List<Meeting> meetingList;
 
     @CreatedDate
     @Column(nullable = false)

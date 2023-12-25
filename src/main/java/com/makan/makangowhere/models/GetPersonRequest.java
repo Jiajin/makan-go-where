@@ -4,7 +4,7 @@ import jakarta.validation.constraints.NotBlank;
 import lombok.Data;
 
 @Data
-public class GetMeetingRequestModel {
+public class GetPersonRequest {
     @NotBlank
-    private String id;
+    private String email;
 }

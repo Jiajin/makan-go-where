@@ -43,6 +43,7 @@ public class PersonServiceTest {
     private PersonService personService;
 
     private static String meetingId;
+    private static String personEmail;
 
     @BeforeEach
     public void setup() {
@@ -53,6 +54,7 @@ public class PersonServiceTest {
 
         Person person = new Person("name", "123@email.com");
         personRepository.save(person);
+        personEmail = person.getEmail();
 
         Meeting meeting = new Meeting("meetingName", person.getId(), MeetingStatus.ACTIVE);
         meetingRepository.save(meeting);
@@ -103,6 +105,39 @@ public class PersonServiceTest {
             // check expected exception
             if (!exMessage.equals("")) {
                 assertEquals(exMessage, e.getMessage());
+
+            } else
+                fail("Unexpected exception: " + e.getMessage());
+        }
+    }
+
+    private static Stream<Arguments> getTestCases() {
+        return Stream.of(
+                Arguments.of("personId", true, ""),
+                Arguments.of("personId", false, "The user does not exist"));
+    }
+
+    @ParameterizedTest
+    @MethodSource("getTestCases")
+    public void testGet(String email, boolean personExist, String exMessage) {
+
+        // Given
+        if (personExist)
+            email = personEmail;
+
+        // When
+        try {
+            Person retrieved = personService.get(email);
+            // Then
+            assertNotNull(retrieved);
+            List<Meeting> meetingList = retrieved.getMeetingList();
+            assertNotNull(meetingList);
+            assertEquals(1, meetingList.size());
+            assertEquals("meetingName", meetingList.get(0).getName());
+        } catch (RecordNotFoundException e) {
+            // check expected exception
+            if (!exMessage.equals("")) {
+                assertEquals(e.getMessage(), exMessage);
 
             } else
                 fail("Unexpected exception: " + e.getMessage());
