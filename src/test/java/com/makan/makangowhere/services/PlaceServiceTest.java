@@ -71,18 +71,19 @@ public class PlaceServiceTest {
 
     private static Stream<Arguments> createTestCases() {
         return Stream.of(
-                Arguments.of(new CreatePlaceRequest("placeName", "address", "createdBy", "meetingId"), true, true, true,
-                        ""),
-                Arguments.of(new CreatePlaceRequest("placeName", "address", "createdBy", "meetingId"), false, true,
-                        true,
+                Arguments.of(new CreatePlaceRequest("placeName", "address", "createdBy", "meetingId"),
+                        true, true, true, true, ""),
+                Arguments.of(new CreatePlaceRequest("placeName", "address", "createdBy", "meetingId"),
+                        false, true, true, true,
                         "The makan session does not exist"),
-                Arguments.of(new CreatePlaceRequest("placeName", "address", "createdBy",
-                        "meetingId"), true, false,
-                        true,
+                Arguments.of(new CreatePlaceRequest("placeName", "address", "createdBy", "meetingId"),
+                        true, false, true, true,
+                        "The makan location has been chosen!"),
+                Arguments.of(new CreatePlaceRequest("placeName", "address", "createdBy", "meetingId"),
+                        true, true, false, true,
                         "The user trying to create the session does not exist"),
-                Arguments.of(new CreatePlaceRequest("placeName", "address", "createdBy",
-                        "meetingId"), true, true,
-                        false,
+                Arguments.of(new CreatePlaceRequest("placeName", "address", "createdBy", "meetingId"),
+                        true, true, true, false,
                         "The user trying to create the location is not part of this makan session")
 
         );
@@ -91,8 +92,8 @@ public class PlaceServiceTest {
     @ParameterizedTest
     @MethodSource("createTestCases")
     @MockitoSettings(strictness = Strictness.LENIENT) // To allow for multiple test cases w single Parameterized test
-    public void testSave(CreatePlaceRequest input, boolean meetingExist, boolean isPersonExist, boolean isPersonInvited,
-            String exMessage) {
+    public void testSave(CreatePlaceRequest input, boolean meetingExist, boolean meetingActive, boolean isPersonExist,
+            boolean isPersonInvited, String exMessage) {
 
         // Given
         if (meetingExist) {

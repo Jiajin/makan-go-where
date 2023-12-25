@@ -13,6 +13,7 @@ import com.makan.makangowhere.models.CreatePlaceRequest;
 import com.makan.makangowhere.models.Meeting;
 import com.makan.makangowhere.models.Person;
 import com.makan.makangowhere.models.Place;
+import com.makan.makangowhere.models.Meeting.MeetingStatus;
 import com.makan.makangowhere.repository.MeetingRepository;
 import com.makan.makangowhere.repository.PersonRepository;
 import com.makan.makangowhere.repository.PlaceRepository;
@@ -30,12 +31,15 @@ public class PlaceService {
 
     public Place save(CreatePlaceRequest input) {
 
-        // Check if meeting exists
+        // Check if meeting exists and is Active
         Optional<Meeting> meetingOptional = meetingRepository.findById(input.getMeetingId());
         if (!meetingOptional.isPresent()) {
             throw new RecordNotFoundException(errorMessages.MeetingNotFound);
         }
         Meeting meeting = meetingOptional.get();
+        if (meeting.getStatus() != MeetingStatus.ACTIVE) {
+            throw new RecordNotFoundException(errorMessages.MeetingOver);
+        }
 
         // Check if person is part of Meeting
         Optional<Person> personOptional = personRepository.findById(input.getCreatedBy());
