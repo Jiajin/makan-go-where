@@ -56,7 +56,7 @@ public class MakanRestController {
         logger.info("Received: {}", input);
         Meeting meeting = meetingService.finalize(input);
 
-        return new ResponseEntity<>(meeting, HttpStatus.CREATED);
+        return new ResponseEntity<>(meeting, HttpStatus.OK);
 
     }
 
@@ -78,7 +78,7 @@ public class MakanRestController {
         logger.info("Received: {}", input);
         Person savedPerson = personService.savePersonMeeting(input);
 
-        return new ResponseEntity<>(savedPerson, HttpStatus.CREATED);
+        return new ResponseEntity<>(savedPerson, HttpStatus.OK);
     }
 
     @PostMapping(value = "/getPerson", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
@@ -88,7 +88,7 @@ public class MakanRestController {
         logger.info("Received: {}", input);
         Person person = personService.get(input.getEmail());
 
-        return new ResponseEntity<>(person, HttpStatus.CREATED);
+        return new ResponseEntity<>(person, HttpStatus.OK);
     }
 
     @PostMapping(value = "/createPlace", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
