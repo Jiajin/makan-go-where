@@ -9,6 +9,7 @@ import com.makan.makangowhere.exceptions.RecordNotFoundException;
 import com.makan.makangowhere.models.AcceptInviteRequest;
 import com.makan.makangowhere.models.Meeting;
 import com.makan.makangowhere.models.Person;
+import com.makan.makangowhere.models.Meeting.MeetingStatus;
 import com.makan.makangowhere.repository.MeetingRepository;
 import com.makan.makangowhere.repository.PersonRepository;
 
@@ -32,11 +33,14 @@ public class PersonService {
 
         Person person = new Person(input.getName(), input.getEmail());
 
-        // Check if meeting exists
+        // Check if meeting exists and is ACTIVE
         Optional<Meeting> meetingOptional = meetingRepository.findById(input.getMeetingId());
-        if (!meetingOptional.isPresent()) {
+        if (!meetingOptional.isPresent())
             throw new RecordNotFoundException(errorMessages.MeetingNotFound);
-        }
+
+        Meeting meeting = meetingOptional.get();
+        if (meeting.getStatus() != MeetingStatus.ACTIVE)
+            throw new RecordNotFoundException(errorMessages.MeetingOver);
 
         // update meeting list
         List<String> meetingList = new ArrayList<String>();

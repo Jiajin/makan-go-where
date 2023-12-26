@@ -71,9 +71,11 @@ public class PersonServiceTest {
     private static Stream<Arguments> savePersonMeetingTestCases() {
         return Stream.of(
                 Arguments.of(new AcceptInviteRequest("personName", "email", "meetingId"), true,
-                        ""),
+                        true, ""),
                 Arguments.of(new AcceptInviteRequest("personName", "email", "meetingId"), false,
-                        "The makan session does not exist")
+                        true, "The makan session does not exist"),
+                Arguments.of(new AcceptInviteRequest("personName", "email", "meetingId"), true,
+                        false, "The makan location has been chosen!")
 
         );
     }
@@ -81,7 +83,7 @@ public class PersonServiceTest {
     @ParameterizedTest
     @MethodSource("savePersonMeetingTestCases")
     @MockitoSettings(strictness = Strictness.LENIENT) // To allow for multiple test cases w single Parameterized test
-    public void testSave(AcceptInviteRequest input, boolean meetingExist, String exMessage) {
+    public void testSave(AcceptInviteRequest input, boolean meetingExist, boolean meetingActive, String exMessage) {
 
         // Given
         if (meetingExist) {
