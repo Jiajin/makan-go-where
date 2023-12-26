@@ -1,0 +1,249 @@
+{
+	"info": {
+		"_postman_id": "4b7ae7bf-d370-4cda-b2b4-d931f4cdcd24",
+		"name": "makan",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "14371181"
+	},
+	"item": [
+		{
+			"name": "SavePerson",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.environment.set(\"personId\", pm.response.json().id);",
+							"pm.environment.set(\"personEmail\", pm.response.json().email);"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"name\":\"abc\",\n    \"email\":\"123@12.com\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{host}}/api/v1/client/savePerson",
+					"host": [
+						"{{host}}"
+					],
+					"path": [
+						"api",
+						"v1",
+						"client",
+						"savePerson"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "GetMeetingById",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"id\":\"{{meetingId}}\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{host}}/api/v1/client/getMeetingById",
+					"host": [
+						"{{host}}"
+					],
+					"path": [
+						"api",
+						"v1",
+						"client",
+						"getMeetingById"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "GetPerson",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"email\":\"{{personEmail}}\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{host}}/api/v1/client/getPerson",
+					"host": [
+						"{{host}}"
+					],
+					"path": [
+						"api",
+						"v1",
+						"client",
+						"getPerson"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "FinalizeMeeting",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"meetingId\":\"{{meetingId}}\",\n    \"createdBy\":\"{{personId}}\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{host}}/api/v1/client/finalizeMeeting",
+					"host": [
+						"{{host}}"
+					],
+					"path": [
+						"api",
+						"v1",
+						"client",
+						"finalizeMeeting"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "CreatePlace",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"name\":\"Restaurant\",\n    \"address\":\"Pasir ris st\",\n    \"createdBy\":\"{{personId}}\",\n    \"meetingId\":\"{{meetingId}}\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{host}}/api/v1/client/createPlace",
+					"host": [
+						"{{host}}"
+					],
+					"path": [
+						"api",
+						"v1",
+						"client",
+						"createPlace"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "SaveMeeting",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.environment.set(\"meetingId\", pm.response.json().id);",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"name\":\"Test Finalize\",\n    \"createdBy\":\"{{personId}}\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{host}}/api/v1/client/saveMeeting",
+					"host": [
+						"{{host}}"
+					],
+					"path": [
+						"api",
+						"v1",
+						"client",
+						"saveMeeting"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "AcceptInvite",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.environment.set(\"personId\", pm.response.json().id);",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"name\":\"abc\",\n    \"email\":\"123@112.com\",\n    \"meetingId\": \"{{meetingId}}\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{host}}/api/v1/client/acceptInvite",
+					"host": [
+						"{{host}}"
+					],
+					"path": [
+						"api",
+						"v1",
+						"client",
+						"acceptInvite"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
