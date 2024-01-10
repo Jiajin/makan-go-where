@@ -10,6 +10,7 @@ import com.makan.makangowhere.models.GetPersonRequest;
 import com.makan.makangowhere.models.Meeting;
 import com.makan.makangowhere.models.Person;
 import com.makan.makangowhere.models.Place;
+import com.makan.makangowhere.services.AuthService;
 import com.makan.makangowhere.services.MeetingService;
 import com.makan.makangowhere.services.PersonService;
 import com.makan.makangowhere.services.PlaceService;
@@ -35,6 +36,7 @@ public class MakanRestController {
     private final MeetingService meetingService;
     private final PersonService personService;
     private final PlaceService placeService;
+    private final AuthService authService;
 
     private final Logger logger = LoggerFactory.getLogger(MakanRestController.class);
 
@@ -109,6 +111,16 @@ public class MakanRestController {
         Meeting meeting = meetingService.get(input.getId());
 
         return new ResponseEntity<>(meeting, HttpStatus.OK);
+    }
+
+    @PostMapping(value = "/login", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseBody
+    public ResponseEntity<String> getMeetingById(@Valid @RequestBody GetPersonRequest input) {
+
+        logger.info("Received: {}", input);
+        String jwt = authService.issueToken(input.getEmail());
+
+        return new ResponseEntity<>(jwt, HttpStatus.OK);
     }
 
 }
